@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #cb9cb6;
+}
+
+.task {
+    background-color: #fff;
+    border: 2px solid #cb9cb6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+button {
+    padding: 10px;
+    background-color: #cb9cb6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b57aa3;
+}
+
+#scoreDisplay {
+    font-size: 18px;
+    margin-top: 20px;
+    text-align: center;
+}

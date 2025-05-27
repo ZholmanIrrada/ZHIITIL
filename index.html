@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>Ағылшын және орыс тілін үйренуге арналған деңгей бойынша тапсырмалар</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #cb9cb6;
+        }
+        .task, .menu {
+            background-color: #fff;
+            border: 4px solid #cb9cb6;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        button {
+            padding: 20px;
+            background-color: #cb9cb6;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b57aa3;
+        }
+        #scoreDisplay {
+            font-size: 22px;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ағылшын және орыс тілін үйренуге арналған деңгей бойынша берілген тапсырмалар</h1>
+    <div id="mainMenu" class="menu">
+        <button onclick="showLanguage('english')">Ағылшын тілі</button>
+        <button onclick="showLanguage('russian')">Орыс тілі</button>
+    </div>
+
+    <div id="englishMenu" class="menu" style="display:none;">
+        <button onclick="showLevel('english', 'A1')">A1 деңгейі</button>
+        <button onclick="showLevel('english', 'A2')">A2 деңгейі</button>
+        <button onclick="backToMain()">Артқа</button>
+    </div>
+
+    <div id="russianMenu" class="menu" style="display:none;">
+        <button onclick="showLevel('russian', 'A1')">A1 деңгейі</button>
+        <button onclick="showLevel('russian', 'A2')">A2 деңгейі</button>
+        <button onclick="backToMain()">Артқа</button>
+    </div>
+
+    <div id="taskContainer"></div>
+    <div id="scoreDisplay"></div>
+
+    <script>
+        const tasks = {
+            english: {
+                A1: [
+                    { question: "Сөз: алма", options: ["apple", "book", "dog", "house"], correct: "apple" },
+                    { question: "Сөз: кітап", options: ["table", "pen", "book", "chair"], correct: "book" },
+                    { question: "Сөз: ит", options: ["cat", "dog", "car", "pen"], correct: "dog" },
+                    { question: "Сөз: үй", options: ["car", "table", "house", "chair"], correct: "house" },
+                    { question: "Сөз: орындық", options: ["chair", "table", "pen", "book"], correct: "chair" },
+                    { question: "Сөз: көлік", options: ["car", "pen", "book", "dog"], correct: "car" },
+                    { question: "Сөз: сәлем", options: ["hello", "hi", "goodbye", "bye"], correct: "hello" },
+                    { question: "Сөз: мысық", options: ["cat", "dog", "car", "house"], correct: "cat" },
+                    { question: "Сөз: үстел", options: ["table", "chair", "book", "pen"], correct: "table" },
+                    { question: "Сөз: қалам", options: ["pen", "book", "dog", "car"], correct: "pen" }
+                ],
+                A2: [
+                    { question: "Сөз: дәмді", options: ["delicious", "hungry", "tired", "beautiful"], correct: "delicious" },
+                    { question: "Сөз: бақытты", options: ["happy", "sad", "angry", "tired"], correct: "happy" },
+                    { question: "Сөз: тез", options: ["quickly", "slowly", "loudly", "quietly"], correct: "quickly" },
+                    { question: "Сөз: кейде", options: ["sometimes", "never", "always", "often"], correct: "sometimes" },
+                    { question: "Сөз: ешқашан", options: ["never", "sometimes", "always", "often"], correct: "never" },
+                    { question: "Сөз: әрдайым", options: ["always", "never", "sometimes", "often"], correct: "always" },
+                    { question: "Сөз: аш", options: ["hungry", "tired", "angry", "happy"], correct: "hungry" },
+                    { question: "Сөз: шаршаған", options: ["tired", "hungry", "happy", "sad"], correct: "tired" },
+                    { question: "Сөз: әдемі", options: ["beautiful", "ugly", "boring", "interesting"], correct: "beautiful" },
+                    { question: "Сөз: қызықты", options: ["interesting", "boring", "funny", "sad"], correct: "interesting" }
+                ]
+            },
+            russian: {
+                A1: [
+                    { question: "Сөз: сәлем", options: ["Привет", "Пока", "Спасибо", "Пожалуйста"], correct: "Привет" },
+                    { question: "Сөз: үй", options: ["Дом", "Машина", "Школа", "Книга"], correct: "Дом" },
+                    { question: "Сөз: кітап", options: ["Книга", "Ручка", "Стол", "Мама"], correct: "Книга" },
+                    { question: "Сөз: көлік", options: ["Машина", "Дом", "Школа", "Кошка"], correct: "Машина" },
+                    { question: "Сөз: мектеп", options: ["Школа", "Дом", "Кошка", "Мама"], correct: "Школа" },
+                    { question: "Сөз: мысық", options: ["Кошка", "Собака", "Дом", "Книга"], correct: "Кошка" },
+                    { question: "Сөз: ана", options: ["Мама", "Папа", "Бабушка", "Дедушка"], correct: "Мама" },
+                    { question: "Сөз: әке", options: ["Папа", "Мама", "Дедушка", "Брат"], correct: "Папа" },
+                    { question: "Сөз: үстел", options: ["Стол", "Ручка", "Книга", "Мама"], correct: "Стол" },
+                    { question: "Сөз: қалам", options: ["Ручка", "Книга", "Стол", "Мама"], correct: "Ручка" }
+                ],
+                A2: [
+                    { question: "Сөз: мұғалім", options: ["Учитель", "Доктор", "Водитель", "Продавец"], correct: "Учитель" },
+                    { question: "Сөз: ағаш", options: ["Дерево", "Лист", "Цветок", "Трава"], correct: "Дерево" },
+                    { question: "Сөз: бала", options: ["Ребёнок", "Родитель", "Брат", "Сестра"], correct: "Ребёнок" },
+                    { question: "Сөз: көше", options: ["Улица", "Площадь", "Парк", "Мост"], correct: "Улица" },
+                    { question: "Сөз: әдемі", options: ["Красивый", "Уродливый", "Скучный", "Весёлый"], correct: "Красивый" },
+                    { question: "Сөз: ақылды", options: ["Умный", "Глупый", "Смешной", "Скучный"], correct: "Умный" },
+                    { question: "Сөз: жылдам", options: ["Быстрый", "Медленный", "Громкий", "Тихий"], correct: "Быстрый" },
+                    { question: "Сөз: дауыс қатты", options: ["Громко", "Тихо", "Быстро", "Медленно"], correct: "Громко" },
+                    { question: "Сөз: дауыс жай", options: ["Тихо", "Громко", "Медленно", "Быстро"], correct: "Тихо" },
+                    { question: "Сөз: достар", options: ["Друзья", "Враги", "Соседи", "Родственники"], correct: "Друзья" }
+                ]
+            }
+        };
+
+        let score = 0, currentTasks = [];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function showLanguage(language) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById(language + 'Menu').style.display = 'block';
+            document.getElementById('taskContainer').innerHTML = '';
+            document.getElementById('scoreDisplay').textContent = '';
+        }
+
+        function backToMain() {
+            document.getElementById('englishMenu').style.display = 'none';
+            document.getElementById('russianMenu').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('taskContainer').innerHTML = '';
+            document.getElementById('scoreDisplay').textContent = '';
+        }
+
+        function showLevel(language, level) {
+            score = 0;
+            currentTasks = shuffleArray([...tasks[language][level]]);
+            document.getElementById('taskContainer').innerHTML = '';
+            currentTasks.forEach((task, index) => {
+                const div = document.createElement("div");
+                div.classList.add("task");
+                const q = document.createElement("h3");
+                q.textContent = ${index + 1}. ${task.question};
+                div.appendChild(q);
+                const shuffledOptions = shuffleArray([...task.options]);
+                shuffledOptions.forEach(option => {
+                    const btn = document.createElement("button");
+                    btn.textContent = option;
+                    btn.onclick = () => {
+                        if (btn.disabled) return;
+                        if (option === task.correct) {
+                            btn.style.backgroundColor = "green";
+                            score++;
+                        } else {
+                            btn.style.backgroundColor = "red";
+                        }
+                        div.querySelectorAll("button").forEach(b => b.disabled = true);
+
+                        // ГИФ қосу
+                        const existingGif = div.querySelector(".result-gif");
+                        if (existingGif) existingGif.remove();
+                        const gif = document.createElement("img");
+                        gif.classList.add("result-gif");
+                        gif.style.width = "100px";
+                        if (option === task.correct) {
+                            gif.src = "https://media1.tenor.com/m/A9C8TYwQCYkAAAAd/animals-boogerbear.gif";
+                        } else {
+                            gif.src = "https://media1.tenor.com/m/be6lv2_IZ6cAAAAd/its-okay.gif";
+                        }
+                        div.appendChild(gif);
+                    };
+                    div.appendChild(btn);
+                });
+                document.getElementById('taskContainer').appendChild(div);
+            });
+            const finishBtn = document.createElement("button");
+            finishBtn.textContent = "Тексеру";
+            finishBtn.onclick = () => {
+                document.getElementById("scoreDisplay").textContent = Сіздің нәтижеңіз: ${score} / ${currentTasks.length};
+            };
+            const resetBtn = document.createElement("button");
+            resetBtn.textContent = "Қайта тапсыру";
+            resetBtn.onclick = () => showLevel(language, level);
+            document.getElementById('taskContainer').appendChild(finishBtn);
+            document.getElementById('taskContainer').appendChild(resetBtn);
+        }
+    </script>
+</body>
+</html>
