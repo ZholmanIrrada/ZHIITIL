@@ -74,6 +74,9 @@
     <div id="scoreDisplay"></div>
 
     <script>
+        const correctSound = new Audio("https://www.soundjay.com/button/sounds/button-4.mp3");
+        const wrongSound = new Audio("https://www.soundjay.com/button/sounds/button-10.mp3");
+
         const tasks = {
             english: {
                 A1: [
@@ -169,26 +172,31 @@
                     const btn = document.createElement("button");
                     btn.textContent = option;
                     btn.onclick = () => {
-                        if (btn.disabled) return;
-                        if (option === task.correct) {
-                            btn.style.backgroundColor = "green";
-                            score++;
-                        } else {
-                            btn.style.backgroundColor = "red";
-                        }
-                        div.querySelectorAll("button").forEach(b => b.disabled = true);
+    if (btn.disabled) return;
+    if (option === task.correct) {
+        btn.style.backgroundColor = "green";
+        correctSound.currentTime = 0; // Қайта бастау үшін
+        correctSound.play(); // Дұрыс дыбыс
+        score++;
+    } else {
+        btn.style.backgroundColor = "red";
+        wrongSound.currentTime = 0;
+        wrongSound.play(); // Қате дыбыс
+    }
+    div.querySelectorAll("button").forEach(b => b.disabled = true);
 
-                        // ГИФ қосу
-                        const existingGif = div.querySelector(".result-gif");
-                        if (existingGif) existingGif.remove();
-                        const gif = document.createElement("img");
-                        gif.classList.add("result-gif");
-                        gif.style.width = "100px";
-                        gif.src = option === task.correct
-                            ? "https://media1.tenor.com/m/A9C8TYwQCYkAAAAd/animals-boogerbear.gif"
-                            : "https://media1.tenor.com/m/be6lv2_IZ6cAAAAd/its-okay.gif";
-                        div.appendChild(gif);
-                    };
+    // ГИФ қосу
+    const existingGif = div.querySelector(".result-gif");
+    if (existingGif) existingGif.remove();
+    const gif = document.createElement("img");
+    gif.classList.add("result-gif");
+    gif.style.width = "100px";
+    gif.src = option === task.correct
+        ? "https://media1.tenor.com/m/A9C8TYwQCYkAAAAd/animals-boogerbear.gif"
+        : "https://media1.tenor.com/m/be6lv2_IZ6cAAAAd/its-okay.gif";
+    div.appendChild(gif);
+};
+
                     div.appendChild(btn);
                 });
                 document.getElementById('taskContainer').appendChild(div);
